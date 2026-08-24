@@ -92,8 +92,18 @@
      BOTTOM of the viewport rather than merely below the sign-off: the flex
      free space collapses above it. The top padding keeps it off the fold on
      a short screen, where auto has no space to give. */
-  .fineprint { margin:auto 0 0; padding-top:48px; font-size:11.5px; line-height:1.6;
-    color:#a89f89; max-width:420px; }
+  /*
+    `align-self:stretch` is what lets this sit right: the wrap centres its
+    children, so without it the block is only as wide as its text and
+    text-align:right has nothing to push against. The 420px cap is gone for the
+    same reason — it was what forced two lines.
+
+    No `white-space:nowrap`. On a phone this sentence cannot fit on one line at
+    any readable size, and nowrap there would push the page sideways. One line
+    is what it takes on a normal screen; wrapping on a narrow one is correct.
+  */
+  .fineprint { margin:auto 0 0; padding-top:48px; font-size:10px; line-height:1.6;
+    color:#a89f89; align-self:stretch; text-align:right; }
   .fineprint a { color:#8d846e; }
   [hidden] { display:none !important; }
 </style>

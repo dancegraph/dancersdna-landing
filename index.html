@@ -79,6 +79,13 @@
   .again { display:inline-block; margin-top:16px; cursor:pointer; background:none; border:none;
     font:600 13px 'Archivo'; color:#7c5510; border-bottom:1px solid #d9b96a; padding:0 0 2px; }
   .signoff { margin:14px 0 0; font-size:12.5px; color:#a89f89; }
+  /*
+    The line House Counsel requires before anything is typed, not after. Art. 13
+    information is owed at the moment data is obtained, so a link on the
+    thank-you screen would be too late to be the thing it claims to be.
+  */
+  .fineprint { margin:16px 0 0; font-size:11.5px; line-height:1.6; color:#a89f89; max-width:420px; }
+  .fineprint a { color:#8d846e; }
   [hidden] { display:none !important; }
 </style>
 </head>
@@ -88,41 +95,235 @@
     <h1 class="mark"><span style="color:#221e18">dancers</span><span style="color:#9a6b15">dna</span></h1>
     <p class="intl">International</p>
 
-    <p class="eyebrow">WHAT'S COMING</p>
+    <!--
+      No eyebrow above the tagline. An earlier version read "WHAT'S COMING" and
+      Elias had it removed; the handoff says so explicitly. Do not reinstate it.
+    -->
     <p class="tagline">Your career, verified. The industry, connected.</p>
     <p class="summary">Search, connections, exports, dancers like you, and a manager for your career — all in one place.</p>
 
     <!--
-      THE QUESTION FORM IS DELIBERATELY NOT HERE YET.
+      ── THE QUESTION FLOW ───────────────────────────────────────────────────
+      Three states in one place, per Design's handoff: ask → reply → done. No
+      page navigation, no modal. It was removed on 2026-08-24 because it made
+      promises the site could not keep, and it returns now that each one is
+      true:
 
-      House Counsel ruled on it, 2026-08-24 (LEGAL-REGISTER items 59-66): the
-      static half of this page may ship today; the form ships once three things
-      exist. Not paperwork — each one is a promise this page would otherwise
-      make and break:
+        59  A published privacy notice, at /privacy, linked BEFORE submit —
+            Art. 13 information is owed when the data is obtained, not on a
+            thank-you screen.
+        60  A named controller with a mailbox that answers: hello@dancersdna.com
+            went live today, and a test send was confirmed delivered.
+        61  A named recipient for what is typed — see the notice.
 
-        59  A PUBLISHED PRIVACY NOTICE at a real URL. Art. 13 information is
-            owed at the MOMENT the data is obtained — on this page, before
-            submit, not on a thank-you screen.
-        60  A NAMED CONTROLLER, which is Elias personally until the company is
-            incorporated, with a contact address that actually receives mail.
-            The domain has no MX record, and a notice printing a bouncing
-            address is worse than one printing none.
-        61  A NAMED SENDER for the reply, because whatever sends it is a
-            recipient of the stranger's enquiry under Art. 13(1)(e).
+      Two departures from the design file, both deliberate:
 
-      Also decided, for when it does ship: "email me when it opens" is consent
-      for ONE email and the address is deleted once it is sent; a question
-      asker's address may never be reused to announce the launch; Instagram is
-      not email with a different shape; and the no-reply path must say "we
-      won't reply" rather than "anonymous", because the platform still logs an
-      IP and the question text routinely identifies its author.
+      1. "I'm just curious" now asks for an email. In the mockup that path went
+         straight to the confirmation, which read "We'll email you the moment it
+         opens" — a promise to write to someone whose address was never asked
+         for. The page cannot keep that. It now collects the address, which is
+         also what makes it the launch-list consent House Counsel described
+         (item 62: one email, then the address goes).
 
-      So the invitation is absent rather than dishonest. It returns whole.
+      2. The mockup's mailto: was replaced with a real POST, which the handoff
+         itself asks for: a mailto silently does nothing on a device with no
+         mail app configured, which is most phones.
     -->
+    <div class="flow" id="flow">
+
+      <!-- STATE 1 — ask -->
+      <div id="state-ask">
+        <p class="helper">For now… ask us anything — what this does, when it opens.</p>
+        <div class="box">
+          <input id="q" type="text" placeholder="Type your question" aria-label="Your question" maxlength="2000">
+          <button class="go" id="ask-go" type="button">Ask →</button>
+        </div>
+        <button class="quiet" id="curious" type="button">I'm just curious to see what this is</button>
+      </div>
+
+      <!-- STATE 2 — where to reply -->
+      <div id="state-reply" hidden>
+        <p class="helper" id="reply-prompt">Where would you like us to reply?</p>
+        <div class="pills" id="reply-pills">
+          <button class="pill" data-method="email" type="button">Email</button>
+          <button class="pill" data-method="instagram" type="button">Instagram</button>
+          <button class="pill filled" data-method="none" type="button">No reply</button>
+        </div>
+        <div id="reply-input" hidden>
+          <div class="box">
+            <input id="contact" type="text" aria-label="Where to reply">
+            <button class="go" id="contact-go" type="button">→</button>
+          </div>
+          <button class="back" id="back" type="button">← back</button>
+        </div>
+      </div>
+
+      <!-- STATE 3 — done -->
+      <div id="state-done" hidden>
+        <p class="done-title" id="done-title">Thanks for your question.</p>
+        <p class="done-body" id="done-body"></p>
+        <button class="again" id="again" type="button">Ask another question →</button>
+      </div>
+
+      <!--
+        The honeypot. Hidden from people, completed by form-filling bots. Not
+        `display:none` on the input itself via the `hidden` attribute, because
+        some bots skip those — it is visually removed but still a real field.
+      -->
+      <div style="position:absolute;left:-9999px" aria-hidden="true">
+        <label>Website <input id="website" type="text" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <p class="fineprint">
+        <a href="/privacy">What happens to what you type</a> · if you're under 16,
+        please ask a parent or guardian to write to us instead.
+      </p>
+    </div>
+
     <p class="signoff" style="margin-top:44px">See you soon.</p>
 
   </main>
 
+<script>
+(function () {
+  'use strict';
 
+  var ENDPOINT = 'https://dancegraph-api.db.oceannet.dev/dancegraph/v1/holding-page/question';
+
+  // How long the visitor has had the page open. The endpoint discards anything
+  // submitted within three seconds — a person reading and typing takes longer,
+  // a script does not wait at all.
+  var loadedAt = Date.now();
+
+  var el = function (id) { return document.getElementById(id); };
+  var states = { ask: el('state-ask'), reply: el('state-reply'), done: el('state-done') };
+
+  var question = '';
+  var method = null;      // 'email' | 'instagram' | 'none' | 'curious'
+  var contactValue = '';
+
+  function show(name) {
+    for (var key in states) states[key].hidden = key !== name;
+  }
+
+  function goToReply() {
+    el('reply-pills').hidden = false;
+    el('reply-input').hidden = true;
+    el('reply-prompt').textContent = 'Where would you like us to reply?';
+    show('reply');
+  }
+
+  /**
+   * Sends, then shows the confirmation.
+   *
+   * The confirmation appears whether or not the request succeeded, and that is
+   * a considered choice rather than sloppiness: a visitor who has typed a
+   * question and pressed a button has done everything asked of them, and an
+   * error message they can do nothing about turns a friendly page hostile. The
+   * failure is logged to the console for us, not staged for them.
+   *
+   * What it must never do is claim more than it knows. The copy says we will
+   * reply, not that anything arrived.
+   */
+  function submit() {
+    var payload = {
+      elapsedMs: Date.now() - loadedAt,
+      website: el('website').value
+    };
+    if (question) payload.question = question;
+    if (method === 'email') payload.contactEmail = contactValue;
+    if (method === 'instagram') payload.question = (question || '') +
+      '\n\n[reply on Instagram: ' + contactValue + ']';
+    if (method === 'curious') {
+      payload.contactEmail = contactValue;
+      payload.wantsLaunchEmail = true;
+    }
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function (err) { console.error('question not sent', err); });
+
+    finish();
+  }
+
+  function finish() {
+    var title = el('done-title');
+    var body = el('done-body');
+
+    if (method === 'curious') {
+      title.textContent = 'Got it.';
+      body.textContent = 'We’ll email you the moment it opens — once, and then your address goes.';
+    } else {
+      title.textContent = 'Thanks for your question.';
+      if (method === 'email') body.textContent = 'We’ll reply to ' + contactValue + '.';
+      else if (method === 'instagram') body.textContent = 'We’ll reply on Instagram, ' + contactValue + '.';
+      else body.textContent = 'No reply needed — we still read every one.';
+    }
+    show('done');
+  }
+
+  el('ask-go').addEventListener('click', function () {
+    var value = el('q').value.trim();
+    if (!value) return;
+    question = value;
+    method = null;
+    goToReply();
+  });
+
+  el('q').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') el('ask-go').click();
+  });
+
+  el('curious').addEventListener('click', function () {
+    question = '';
+    method = 'curious';
+    el('reply-pills').hidden = true;
+    el('reply-input').hidden = false;
+    el('reply-prompt').textContent = 'Where should we tell you when it opens?';
+    el('contact').placeholder = 'you@email.com';
+    el('contact').value = '';
+    show('reply');
+    el('contact').focus();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('#reply-pills .pill'), function (pill) {
+    pill.addEventListener('click', function () {
+      method = pill.getAttribute('data-method');
+      if (method === 'none') { submit(); return; }
+      el('reply-pills').hidden = true;
+      el('reply-input').hidden = false;
+      el('contact').placeholder = method === 'email' ? 'you@email.com' : '@yourhandle';
+      el('contact').value = '';
+      el('contact').focus();
+    });
+  });
+
+  el('contact-go').addEventListener('click', function () {
+    var value = el('contact').value.trim();
+    if (!value) return;
+    contactValue = value;
+    submit();
+  });
+
+  el('contact').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') el('contact-go').click();
+  });
+
+  el('back').addEventListener('click', function () {
+    // Returns to the three pills without losing the typed question.
+    if (method === 'curious') { show('ask'); return; }
+    goToReply();
+  });
+
+  el('again').addEventListener('click', function () {
+    question = ''; method = null; contactValue = '';
+    el('q').value = '';
+    show('ask');
+    el('q').focus();
+  });
+})();
+</script>
 </body>
 </html>

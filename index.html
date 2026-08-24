@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dancersdna — coming soon</title>
+<meta name="description" content="Your career, verified. The industry, connected. dancersdna is a record of live-entertainment careers — coming soon.">
+
+<!--
+  ── dancersdna.com holding page ──────────────────────────────────────────────
+  Built from Claude Design's handoff (design_handoff_coming_soon/README.md,
+  2026-08-24). The design file is a prototype and depends on a prototyping
+  runtime; this is the same design as a plain static page — no framework, no
+  build step, nothing to go stale.
+
+  FONTS ARE SERVED FROM THIS DOMAIN, NEVER FROM GOOGLE.
+  The design links fonts.googleapis.com. That is the one thing changed without
+  asking: dancersdna decided not to send a visitor's IP to a third party before
+  they have done or agreed to anything, and this page is the FIRST thing a
+  stranger loads at the real domain. Reintroducing that request here would undo
+  the decision exactly where it matters most.
+-->
+<style>
+  @font-face { font-family:'Newsreader'; font-style:italic; font-weight:300; font-display:swap;
+    src:url(/fonts/newsreader-300-italic-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Newsreader'; font-style:normal; font-weight:400; font-display:swap;
+    src:url(/fonts/newsreader-400-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Newsreader'; font-style:normal; font-weight:500; font-display:swap;
+    src:url(/fonts/newsreader-500-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Newsreader'; font-style:normal; font-weight:600; font-display:swap;
+    src:url(/fonts/newsreader-600-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Archivo'; font-style:normal; font-weight:400; font-display:swap;
+    src:url(/fonts/archivo-400-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Archivo'; font-style:normal; font-weight:500; font-display:swap;
+    src:url(/fonts/archivo-500-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Archivo'; font-style:normal; font-weight:600; font-display:swap;
+    src:url(/fonts/archivo-600-latin.woff2) format('woff2'); }
+  @font-face { font-family:'Archivo'; font-style:normal; font-weight:700; font-display:swap;
+    src:url(/fonts/archivo-700-latin.woff2) format('woff2'); }
+
+  * { box-sizing:border-box; }
+  body { margin:0; -webkit-font-smoothing:antialiased; }
+  a { color:#7c5510; } a:hover { color:#5f4108; }
+
+  .wrap { min-height:100vh; background:#f7f4ec; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:60px 24px;
+    font-family:'Archivo',sans-serif; color:#221e18; }
+  .soon { margin:0; font:300 italic clamp(30px,7vw,76px) 'Newsreader',serif;
+    letter-spacing:-.005em; color:#5b5344; line-height:1; }
+  .mark { margin:18px 0 0; font:500 clamp(64px,15vw,180px) 'Newsreader',serif;
+    letter-spacing:-.03em; line-height:.95; }
+  .intl { margin:14px 0 0; font:700 14px 'Archivo'; letter-spacing:.34em;
+    text-transform:uppercase; color:#7c5510; }
+  .eyebrow { margin:38px 0 0; font:700 11px ui-monospace,Menlo,monospace;
+    letter-spacing:.18em; color:#7c5510; }
+  .tagline { margin:16px 0 0; font:500 28px 'Newsreader',serif; letter-spacing:-.01em;
+    line-height:1.3; color:#221e18; max-width:500px; }
+  .summary { margin:18px 0 0; font-size:14px; line-height:1.6; color:#5b5344; max-width:430px; }
+  .flow { margin-top:44px; display:flex; flex-direction:column; align-items:center;
+    gap:10px; width:100%; }
+  .helper { margin:0; font-size:13px; color:#8d846e; }
+  .box { display:flex; align-items:center; gap:6px; background:#fffdf6;
+    border:1.5px solid #221e18; border-radius:8px; padding:5px 5px 5px 16px;
+    max-width:420px; width:100%; }
+  .box input { flex:1; border:none; outline:none; background:transparent; font-size:14px;
+    font-family:'Archivo',sans-serif; color:#221e18; padding:10px 0; }
+  .go { cursor:pointer; background:#221e18; color:#f7f4ec; border:none; border-radius:6px;
+    font:600 13px 'Archivo'; padding:9px 16px; white-space:nowrap; }
+  .quiet { background:none; border:none; cursor:pointer; font:400 12.5px 'Archivo';
+    color:#7c5510; text-decoration:underline; padding:0; }
+  .pills { display:flex; justify-content:center; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .pill { cursor:pointer; background:#fffdf6; border:1.5px solid #221e18; border-radius:99px;
+    padding:9px 18px; font:600 13px 'Archivo'; color:#221e18; }
+  .pill.filled { background:#221e18; color:#f7f4ec; }
+  .back { display:inline-block; margin-top:10px; cursor:pointer; background:none; border:none;
+    font:400 12px 'Archivo'; color:#a89f89; }
+  .done-title { margin:0; font:500 20px 'Newsreader',serif; color:#221e18; }
+  .done-body { margin:8px 0 0; font-size:13.5px; line-height:1.6; color:#5b5344; }
+  .again { display:inline-block; margin-top:16px; cursor:pointer; background:none; border:none;
+    font:600 13px 'Archivo'; color:#7c5510; border-bottom:1px solid #d9b96a; padding:0 0 2px; }
+  .signoff { margin:14px 0 0; font-size:12.5px; color:#a89f89; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="soon">coming soon</p>
+    <h1 class="mark"><span style="color:#221e18">dancers</span><span style="color:#9a6b15">dna</span></h1>
+    <p class="intl">International</p>
+
+    <p class="eyebrow">WHAT'S COMING</p>
+    <p class="tagline">Your career, verified. The industry, connected.</p>
+    <p class="summary">Search, connections, exports, dancers like you, and a manager for your career — all in one place.</p>
+
+    <div class="flow">
+      <!-- State 1 — ask -->
+      <div id="step-ask" style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%">
+        <p class="helper">For now… ask us anything — what this does, when it opens.</p>
+        <div class="box">
+          <input id="question" type="text" placeholder="Type your question" aria-label="Your question">
+          <button class="go" id="ask-go" type="button">Ask →</button>
+        </div>
+        <button class="quiet" id="curious" type="button">I'm just curious to see what this is</button>
+      </div>
+
+      <!-- State 2 — reply -->
+      <div id="step-reply" hidden style="text-align:center;max-width:420px;width:100%">
+        <p class="helper">Where would you like us to reply?</p>
+        <div class="pills" id="methods">
+          <button class="pill" type="button" data-method="email">Email</button>
+          <button class="pill" type="button" data-method="instagram">Instagram</button>
+          <button class="pill filled" type="button" data-method="none">No reply</button>
+        </div>
+        <div id="contact-wrap" hidden>
+          <div class="box" style="margin-top:12px">
+            <input id="contact" type="text" placeholder="you@email.com" aria-label="How to reach you">
+            <button class="go" id="contact-go" type="button">→</button>
+          </div>
+          <button class="back" id="back" type="button">← back</button>
+        </div>
+      </div>
+
+      <!-- State 3 — done -->
+      <div id="step-done" hidden style="text-align:center;max-width:420px">
+        <p class="done-title" id="done-title">Thanks for your question.</p>
+        <p class="done-body" id="done-body"></p>
+        <button class="again" id="again" type="button">Ask another question →</button>
+        <p class="signoff">See you soon.</p>
+      </div>
+    </div>
+  </main>
+
+<script>
+/*
+ * Three states in one place — a morph, not a new screen, exactly as the
+ * handoff asks. Plain DOM: this page must keep working for years with nobody
+ * maintaining a toolchain for it.
+ *
+ * ── WHERE A QUESTION ACTUALLY GOES ──────────────────────────────────────────
+ * Nowhere yet, and the page does not pretend otherwise.
+ *
+ * The design's prototype opened the visitor's own mail app addressed to
+ * hello@dancersdna.com. Two reasons that cannot ship: that address CANNOT
+ * RECEIVE ANYTHING (the domain has sending records and no MX at all), and a
+ * mailto silently does nothing on a device with no mail app configured — so a
+ * visitor would type a question, watch nothing happen, and be told "thanks".
+ * The handoff says the same thing: replace it with a real submission.
+ *
+ * That endpoint stores a stranger's email or Instagram handle, which is
+ * personal data collected before any account exists, so it is with House
+ * Counsel before it is built (lawful basis per path, what must be said before
+ * someone types an address, retention, and what deletes it).
+ *
+ * Until it exists, SEND is disabled and the flow says so honestly rather than
+ * thanking someone for a message that went nowhere. Turning it on is one
+ * constant and one fetch.
+ */
+const SUBMIT_ENDPOINT = null; // set when the endpoint exists and counsel has ruled
+
+const $ = (id) => document.getElementById(id);
+const steps = { ask: $('step-ask'), reply: $('step-reply'), done: $('step-done') };
+let pendingMethod = null;
+
+function show(name) {
+  for (const [key, el] of Object.entries(steps)) el.hidden = key !== name;
+}
+
+async function finish(method, contact) {
+  const question = $('question').value.trim();
+  let delivered = false;
+
+  if (SUBMIT_ENDPOINT) {
+    try {
+      const res = await fetch(SUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question, replyMethod: method, contact }),
+      });
+      delivered = res.ok;
+    } catch {
+      delivered = false;
+    }
+  }
+
+  const handle = contact.replace(/^@/, '');
+  let body;
+  if (!delivered) {
+    /*
+     * The honest state. Never say "we'll reply to you" when nothing was sent —
+     * a promise a visitor cannot check is worse than an apology they can.
+     */
+    body = "We can't take questions just yet — this page went up before the inbox did. Nothing was sent, so please don't wait on a reply.";
+    $('done-title').textContent = 'Not yet, sorry.';
+  } else if (method === 'email') {
+    body = `We'll reply to ${contact}.`;
+    $('done-title').textContent = 'Thanks for your question.';
+  } else if (method === 'instagram') {
+    body = `We'll reply on Instagram, @${handle}.`;
+    $('done-title').textContent = 'Thanks for your question.';
+  } else if (method === 'curious') {
+    body = "We'll email you the moment it opens.";
+    $('done-title').textContent = 'Got it.';
+  } else {
+    body = 'No reply needed — we still read every one.';
+    $('done-title').textContent = 'Thanks for your question.';
+  }
+
+  $('done-body').textContent = body;
+  show('done');
+}
+
+$('ask-go').addEventListener('click', () => {
+  if (!$('question').value.trim()) return;
+  show('reply');
+});
+$('question').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $('ask-go').click();
+});
+$('curious').addEventListener('click', () => finish('curious', ''));
+
+$('methods').addEventListener('click', (e) => {
+  const method = e.target instanceof HTMLElement ? e.target.dataset.method : null;
+  if (!method) return;
+  if (method === 'none') return finish('none', '');
+  pendingMethod = method;
+  $('contact').placeholder = method === 'instagram' ? '@yourhandle' : 'you@email.com';
+  $('methods').hidden = true;
+  $('contact-wrap').hidden = false;
+  $('contact').focus();
+});
+$('contact-go').addEventListener('click', () => {
+  if (!$('contact').value.trim()) return;
+  finish(pendingMethod, $('contact').value.trim());
+});
+$('contact').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $('contact-go').click();
+});
+$('back').addEventListener('click', () => {
+  // Keeps the typed question, as the handoff requires.
+  pendingMethod = null;
+  $('contact').value = '';
+  $('contact-wrap').hidden = true;
+  $('methods').hidden = false;
+});
+$('again').addEventListener('click', () => {
+  $('question').value = '';
+  $('contact').value = '';
+  pendingMethod = null;
+  $('contact-wrap').hidden = true;
+  $('methods').hidden = false;
+  show('ask');
+});
+</script>
+</body>
+</html>

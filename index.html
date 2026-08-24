@@ -92,164 +92,37 @@
     <p class="tagline">Your career, verified. The industry, connected.</p>
     <p class="summary">Search, connections, exports, dancers like you, and a manager for your career — all in one place.</p>
 
-    <div class="flow">
-      <!-- State 1 — ask -->
-      <div id="step-ask" style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%">
-        <p class="helper">For now… ask us anything — what this does, when it opens.</p>
-        <div class="box">
-          <input id="question" type="text" placeholder="Type your question" aria-label="Your question">
-          <button class="go" id="ask-go" type="button">Ask →</button>
-        </div>
-        <button class="quiet" id="curious" type="button">I'm just curious to see what this is</button>
-      </div>
+    <!--
+      THE QUESTION FORM IS DELIBERATELY NOT HERE YET.
 
-      <!-- State 2 — reply -->
-      <div id="step-reply" hidden style="text-align:center;max-width:420px;width:100%">
-        <p class="helper">Where would you like us to reply?</p>
-        <div class="pills" id="methods">
-          <button class="pill" type="button" data-method="email">Email</button>
-          <button class="pill" type="button" data-method="instagram">Instagram</button>
-          <button class="pill filled" type="button" data-method="none">No reply</button>
-        </div>
-        <div id="contact-wrap" hidden>
-          <div class="box" style="margin-top:12px">
-            <input id="contact" type="text" placeholder="you@email.com" aria-label="How to reach you">
-            <button class="go" id="contact-go" type="button">→</button>
-          </div>
-          <button class="back" id="back" type="button">← back</button>
-        </div>
-      </div>
+      House Counsel ruled on it, 2026-08-24 (LEGAL-REGISTER items 59-66): the
+      static half of this page may ship today; the form ships once three things
+      exist. Not paperwork — each one is a promise this page would otherwise
+      make and break:
 
-      <!-- State 3 — done -->
-      <div id="step-done" hidden style="text-align:center;max-width:420px">
-        <p class="done-title" id="done-title">Thanks for your question.</p>
-        <p class="done-body" id="done-body"></p>
-        <button class="again" id="again" type="button">Ask another question →</button>
-        <p class="signoff">See you soon.</p>
-      </div>
-    </div>
+        59  A PUBLISHED PRIVACY NOTICE at a real URL. Art. 13 information is
+            owed at the MOMENT the data is obtained — on this page, before
+            submit, not on a thank-you screen.
+        60  A NAMED CONTROLLER, which is Elias personally until the company is
+            incorporated, with a contact address that actually receives mail.
+            The domain has no MX record, and a notice printing a bouncing
+            address is worse than one printing none.
+        61  A NAMED SENDER for the reply, because whatever sends it is a
+            recipient of the stranger's enquiry under Art. 13(1)(e).
+
+      Also decided, for when it does ship: "email me when it opens" is consent
+      for ONE email and the address is deleted once it is sent; a question
+      asker's address may never be reused to announce the launch; Instagram is
+      not email with a different shape; and the no-reply path must say "we
+      won't reply" rather than "anonymous", because the platform still logs an
+      IP and the question text routinely identifies its author.
+
+      So the invitation is absent rather than dishonest. It returns whole.
+    -->
+    <p class="signoff" style="margin-top:44px">See you soon.</p>
+
   </main>
 
-<script>
-/*
- * Three states in one place — a morph, not a new screen, exactly as the
- * handoff asks. Plain DOM: this page must keep working for years with nobody
- * maintaining a toolchain for it.
- *
- * ── WHERE A QUESTION ACTUALLY GOES ──────────────────────────────────────────
- * Nowhere yet, and the page does not pretend otherwise.
- *
- * The design's prototype opened the visitor's own mail app addressed to
- * hello@dancersdna.com. Two reasons that cannot ship: that address CANNOT
- * RECEIVE ANYTHING (the domain has sending records and no MX at all), and a
- * mailto silently does nothing on a device with no mail app configured — so a
- * visitor would type a question, watch nothing happen, and be told "thanks".
- * The handoff says the same thing: replace it with a real submission.
- *
- * That endpoint stores a stranger's email or Instagram handle, which is
- * personal data collected before any account exists, so it is with House
- * Counsel before it is built (lawful basis per path, what must be said before
- * someone types an address, retention, and what deletes it).
- *
- * Until it exists, SEND is disabled and the flow says so honestly rather than
- * thanking someone for a message that went nowhere. Turning it on is one
- * constant and one fetch.
- */
-const SUBMIT_ENDPOINT = null; // set when the endpoint exists and counsel has ruled
 
-const $ = (id) => document.getElementById(id);
-const steps = { ask: $('step-ask'), reply: $('step-reply'), done: $('step-done') };
-let pendingMethod = null;
-
-function show(name) {
-  for (const [key, el] of Object.entries(steps)) el.hidden = key !== name;
-}
-
-async function finish(method, contact) {
-  const question = $('question').value.trim();
-  let delivered = false;
-
-  if (SUBMIT_ENDPOINT) {
-    try {
-      const res = await fetch(SUBMIT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ question, replyMethod: method, contact }),
-      });
-      delivered = res.ok;
-    } catch {
-      delivered = false;
-    }
-  }
-
-  const handle = contact.replace(/^@/, '');
-  let body;
-  if (!delivered) {
-    /*
-     * The honest state. Never say "we'll reply to you" when nothing was sent —
-     * a promise a visitor cannot check is worse than an apology they can.
-     */
-    body = "We can't take questions just yet — this page went up before the inbox did. Nothing was sent, so please don't wait on a reply.";
-    $('done-title').textContent = 'Not yet, sorry.';
-  } else if (method === 'email') {
-    body = `We'll reply to ${contact}.`;
-    $('done-title').textContent = 'Thanks for your question.';
-  } else if (method === 'instagram') {
-    body = `We'll reply on Instagram, @${handle}.`;
-    $('done-title').textContent = 'Thanks for your question.';
-  } else if (method === 'curious') {
-    body = "We'll email you the moment it opens.";
-    $('done-title').textContent = 'Got it.';
-  } else {
-    body = 'No reply needed — we still read every one.';
-    $('done-title').textContent = 'Thanks for your question.';
-  }
-
-  $('done-body').textContent = body;
-  show('done');
-}
-
-$('ask-go').addEventListener('click', () => {
-  if (!$('question').value.trim()) return;
-  show('reply');
-});
-$('question').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') $('ask-go').click();
-});
-$('curious').addEventListener('click', () => finish('curious', ''));
-
-$('methods').addEventListener('click', (e) => {
-  const method = e.target instanceof HTMLElement ? e.target.dataset.method : null;
-  if (!method) return;
-  if (method === 'none') return finish('none', '');
-  pendingMethod = method;
-  $('contact').placeholder = method === 'instagram' ? '@yourhandle' : 'you@email.com';
-  $('methods').hidden = true;
-  $('contact-wrap').hidden = false;
-  $('contact').focus();
-});
-$('contact-go').addEventListener('click', () => {
-  if (!$('contact').value.trim()) return;
-  finish(pendingMethod, $('contact').value.trim());
-});
-$('contact').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') $('contact-go').click();
-});
-$('back').addEventListener('click', () => {
-  // Keeps the typed question, as the handoff requires.
-  pendingMethod = null;
-  $('contact').value = '';
-  $('contact-wrap').hidden = true;
-  $('methods').hidden = false;
-});
-$('again').addEventListener('click', () => {
-  $('question').value = '';
-  $('contact').value = '';
-  pendingMethod = null;
-  $('contact-wrap').hidden = true;
-  $('methods').hidden = false;
-  show('ask');
-});
-</script>
 </body>
 </html>

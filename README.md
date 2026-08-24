@@ -18,7 +18,15 @@ the product is.
 party before they have done or agreed to anything, and this page is the *first*
 thing a stranger loads at the real domain.
 
-**A question is not yet promised a reply.** The design's prototype opened the
+**The question form is not here yet, by legal ruling.** House Counsel ruled on
+it (2026-08-24, `LEGAL-REGISTER` items 59-66): the static half ships today, the
+form ships once a published privacy notice, a named controller with a working
+address, and a named sender for the reply all exist. Each is a promise the page
+would otherwise make and break. The rest of the ruling — one-email consent, no
+reusing a question-asker's address for the launch, Instagram is not email with
+a different shape, "we won't reply" rather than "anonymous" — is waiting for it.
+
+**Background on why the original mechanism could not ship anyway.** The design's prototype opened the
 visitor's own mail app addressed to `hello@dancersdna.com` — an address that
 cannot receive anything, because the domain has sending records and **no MX
 record at all**. The handoff says to replace it with a real submission; that

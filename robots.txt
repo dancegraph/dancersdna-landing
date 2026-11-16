@@ -1,0 +1,39 @@
+# dancersdna.com, the holding page. Same refusals as the product's own sign.
+# The robot names are copied from dancegraph-web scripts/write-robots.mjs
+# (the one home of these lists): change them there first, then here.
+# No text and data mining: see /.well-known/tdmrep.json (TDM Reservation Protocol).
+
+# AI training crawlers: refused. Nothing here is material for building models.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: meta-externalagent
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: Omgilibot
+User-agent: Timpibot
+User-agent: Amazonbot
+Disallow: /
+
+# Web archives (Internet Archive): always refused (Elias, 14 Nov 2026).
+User-agent: ia_archiver
+User-agent: archive.org_bot
+Disallow: /
+
+# AI answer engines: allowed to cite dancersdna, with a link back.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
+# Everyone else, search engines included: this page, the privacy notice and
+# "where our information comes from" must stay findable by the people named.
+User-agent: *
+Allow: /
